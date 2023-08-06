@@ -17,10 +17,10 @@ set(SOURCES
     src/main.cpp
 
         # Add other source files here
-        src/Student.cpp src/Student.h)
+        src/Student.cpp src/Student.hpp src/Test.cpp src/Test.hpp src/StudentModel.cpp src/StudentModel.hpp src/TestModel.cpp src/TestModel.h)
 
 # Create the executable
-add_executable(app ${SOURCES})
+qt_add_executable(app ${SOURCES})
 
 # Link against the required Qt modules
 target_link_libraries(app PUBLIC Qt6::Core Qt6::Gui  Qt6::Qml)
