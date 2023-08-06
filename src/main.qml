@@ -4,61 +4,107 @@ import QtQuick.Layouts
 import App
 
 ApplicationWindow {
-    property Student student: Student {}
+    id: root
 
+    property StudentModel studentModel: StudentModel {
+    }
 
-    height: 300
+    height: 700
     title: "Qt Example"
     visible: true
-    width: 400
+    width: 500
 
-    TextInput {
-        anchors.centerIn: parent
-        font.pixelSize: 24
-        text: `name = ${student.name}`
-    }
-    ListView {
-        id: listView
-
-        anchors.fill: parent
-        anchors.margins: 10
-        model: Student{}
-
-        delegate: RowLayout {
-            id: currentStudent
-
-            width: ListView.width
-
-            TextField {
-                text: `grade = ${model.grade}`
-
-            }
-            // Text {
-            //     text: model.grades
-            // }
-
-        }
-    }
-
-        footer: RowLayout {
+    footer: RowLayout {
         TextField {
-            id : appendBtn
-            text :"enter a garde"
+            id: appendBtn
 
+            text: "enter a garde"
         }
-    Button {
+        Button {
+            text: "Append"
 
-        text: "Append"
-        onClicked: listView.model.append(appendBtn.text)
+            onClicked: listView.model.append(appendBtn.text)
+        }
+        Button {
+            text: "Remove last"
+
+            onClicked: listView.model.removeLast()
+        }
+        Button {
+            text: "Clear"
+
+            onClicked: listView.model.clear()
+        }
     }
-    Button {
-        text: "Remove last"
 
-        onClicked: listView.model.removeLast()
+    Loader {
+        anchors.fill: parent
+        sourceComponent: timer.running ? undefined : students_list
+
+        Timer {
+            id: timer
+
+            interval: 1000
+            running: true
+        }
     }
-    Button {
-        text: "Clear"
+    Component {
+        id: students_list
 
-        onClicked: listView.model.clear()
-    }}
+        ListView {
+            id: listView
+
+            anchors.fill: parent
+            anchors.margins: 10
+            clip: true
+            model: root.studentModel
+
+            delegate: Rectangle {
+                id: currentStudent
+
+                required property var model
+
+                color: "red"
+                height: 200
+                width: ListView.view.width
+
+                RowLayout {
+                    anchors.fill: parent
+                    spacing: 15
+
+                    Rectangle {
+                        color: "grey"
+                        implicitHeight: 100
+                        implicitWidth: 100
+
+                        Text {
+                            text: ` ${currentStudent.model.name}`
+                        }
+                    }
+                    ListView {
+                        id: innerList
+
+                        implicitHeight: 100
+                        implicitWidth: 100
+                        model: currentStudent.model.tests
+
+                        delegate: Item {
+                            id: insideDelegate
+
+                            required property var model
+
+                            height: 50
+                            width: 100
+
+                            Text {
+                                anchors.centerIn: parent
+                                text: `${insideDelegate.model.subject} ${insideDelegate.model.grade}`
+                                width: parent.width * 0.4
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

@@ -3,7 +3,8 @@
 
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
-#include "Student.h"
+#include "Student.hpp"
+#include "StudentModel.hpp"
 #include <iostream>
 #include <string>
 using namespace  std;
@@ -12,7 +13,9 @@ int main(int argc, char *argv[])
     int ID,numOfGrade;
     string name;
     QGuiApplication app(argc, argv);
+    qmlRegisterType<StudentModel>("App", 1, 0, "StudentModel");
     qmlRegisterType<Student>("App", 1, 0, "Student");
+    qmlRegisterType<Test>("App", 1, 0, "Test");
     QQmlApplicationEngine engine;
     const QUrl url(QStringLiteral("/home/almog/CLionProjects/Students-UI/src/main.qml"));
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
@@ -45,7 +48,7 @@ int main(int argc, char *argv[])
 
     return app.exec();
 }
-/*cout <<"Please enter ID, name, and the amount of grade-  /n";
+/*cout <<"Please enter ID, name, and the amount of tests-  /n";
 cin >> ID,name,numOfGrade;Student(ID,name,numOfGrade);*/
 /*//Query the database
 string msg ="";
