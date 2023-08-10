@@ -6,9 +6,10 @@ authors = ["uehrlich <uriehrlich@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = ">=3.8,<3.12"
 conan = "^2.0.9"
 aqtinstall = "^3.1.6"
+qtgql = {path = "3rdparty/qtgql"}
 
 
 [build-system]
