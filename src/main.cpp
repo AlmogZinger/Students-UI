@@ -1,17 +1,14 @@
 #include <QGuiApplication>
 #include <QUrl>
 
-#include "graphql/__generated__/StudentsQuery.hpp"
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <iostream>
 #include <qtgql/bases/bases.hpp>
 #include <qtgql/gqloverhttp/gqloverhttp.hpp>
 #include <string>
-using namespace std;
+
 int main(int argc, char *argv[]) {
-  int ID, numOfGrade;
-  string name;
   QGuiApplication app(argc, argv);
   QQmlApplicationEngine engine;
   auto env =
@@ -20,6 +17,7 @@ int main(int argc, char *argv[]) {
                           new qtgql::gqloverhttp::GraphQLOverHttp(
                               {"http://127.0.0.1:8000/graphql/"}))));
   qtgql::bases::Environment::set_gql_env(env);
+
   auto cont_query = Students::studentsquery::StudentsQuery::shared();
   cont_query->fetch();
   engine.rootContext()->setContextProperty("query", cont_query.get());
