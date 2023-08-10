@@ -1,0 +1,9 @@
+query StudentsQuery{
+    students {
+        name
+        test {
+            subject
+            grade
+        }
+    }
+}

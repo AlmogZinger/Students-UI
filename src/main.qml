@@ -1,13 +1,11 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import App
 
 ApplicationWindow {
     id: root
 
-    property StudentModel studentModel: StudentModel {
-    }
+    property var students: query.data.students
 
     height: 700
     title: "Qt Example"
@@ -37,70 +35,55 @@ ApplicationWindow {
         }
     }
 
-    Loader {
+    ListView {
+        id: listView
+
         anchors.fill: parent
-        sourceComponent: timer.running ? undefined : students_list
+        anchors.margins: 10
+        clip: true
+        model: root.students
 
-        Timer {
-            id: timer
+        delegate: Rectangle {
+            id: currentStudent
+            property var student: currentStudent.model.data
+            required property var model
 
-            interval: 1000
-            running: true
-        }
-    }
-    Component {
-        id: students_list
+            color: "red"
+            height: 200
+            width: ListView.view.width
 
-        ListView {
-            id: listView
+            RowLayout {
+                anchors.fill: parent
+                spacing: 15
 
-            anchors.fill: parent
-            anchors.margins: 10
-            clip: true
-            model: root.studentModel
+                Rectangle {
+                    color: "grey"
+                    implicitHeight: 100
+                    implicitWidth: 100
 
-            delegate: Rectangle {
-                id: currentStudent
+                    Text {
+                        text: ` ${student.name}`
+                    }
+                }
+                ListView {
+                    id: innerList
 
-                required property var model
+                    implicitHeight: 100
+                    implicitWidth: 100
+                    model: currentStudent.student.test
 
-                color: "red"
-                height: 200
-                width: ListView.view.width
+                    delegate: Item {
+                        id: insideDelegate
 
-                RowLayout {
-                    anchors.fill: parent
-                    spacing: 15
-
-                    Rectangle {
-                        color: "grey"
-                        implicitHeight: 100
-                        implicitWidth: 100
+                        required property var model
+                        property var test : model.data
+                        height: 50
+                        width: 100
 
                         Text {
-                            text: ` ${currentStudent.model.name}`
-                        }
-                    }
-                    ListView {
-                        id: innerList
-
-                        implicitHeight: 100
-                        implicitWidth: 100
-                        model: currentStudent.model.tests
-
-                        delegate: Item {
-                            id: insideDelegate
-
-                            required property var model
-
-                            height: 50
-                            width: 100
-
-                            Text {
-                                anchors.centerIn: parent
-                                text: `${insideDelegate.model.subject} ${insideDelegate.model.grade}`
-                                width: parent.width * 0.4
-                            }
+                            anchors.centerIn: parent
+                            text: `${test.subject} ${test.grade}`
+                            width: parent.width * 0.4
                         }
                     }
                 }
