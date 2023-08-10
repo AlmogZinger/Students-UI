@@ -1,0 +1,10 @@
+{
+    "version": 4,
+    "vendor": {
+        "conan": {}
+    },
+    "include": [
+        "/home/almog/CLionProjects/Students-UI/build/Release/generators/CMakePresets.json",
+        "/home/almog/CLionProjects/Students-UI/build/Debug/generators/CMakePresets.json"
+    ]
+}
