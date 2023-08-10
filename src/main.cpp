@@ -1,6 +1,7 @@
 #include <QGuiApplication>
 #include <QUrl>
 
+#include "aplicationsingleton.hpp"
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <iostream>
@@ -9,7 +10,7 @@
 #include <string>
 
 int main(int argc, char *argv[]) {
-  QGuiApplication app(argc, argv);
+  QGuiApplication gui_app(argc, argv);
   QQmlApplicationEngine engine;
   auto env =
       std::shared_ptr<qtgql::bases::Environment>(new qtgql::bases::Environment(
@@ -17,14 +18,12 @@ int main(int argc, char *argv[]) {
                           new qtgql::gqloverhttp::GraphQLOverHttp(
                               {"http://127.0.0.1:8000/graphql/"}))));
   qtgql::bases::Environment::set_gql_env(env);
-
-  auto cont_query = Students::studentsquery::StudentsQuery::shared();
-  cont_query->fetch();
-  engine.rootContext()->setContextProperty("query", cont_query.get());
+  auto app = App();
+  qmlRegisterSingletonInstance("App", 1, 0, "App", &app);
   const QUrl url(
       QStringLiteral("/home/almog/CLionProjects/Students-UI/src/main.qml"));
 
   engine.load(url);
 
-  return app.exec();
+  return gui_app.exec();
 }

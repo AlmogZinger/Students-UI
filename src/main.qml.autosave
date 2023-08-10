@@ -1,12 +1,12 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import App
+
 
 Window {
     id: root
 
-    property var students: App.students_query?.data?.students
+    property var students: query.data.students
 
     height: 700
     title: "Qt Example"
@@ -27,7 +27,7 @@ Window {
             id: currentStudent
 
             required property var model
-            property var student: currentStudent.model.data
+            property Student__students student: currentStudent.model.data
 
             color: "red"
             height: 200
@@ -57,7 +57,8 @@ Window {
                         id: insideDelegate
 
                         required property var model
-                        property var test: model.data
+                        property Test__studentstest test: model.data
+
 
                         height: 50
                         width: 100
@@ -96,7 +97,7 @@ Window {
 
                 ColumnLayout {
                     TextField {
-                        id: nameText
+                        id:nameText
                         text: "enter the name of the student"
                         width: text.implicitWidth
                     }
@@ -107,7 +108,7 @@ Window {
                     }
                     Button {
                         text: "Append!"
-                        onClicked: mutation.AddingStudent(nameText.text, birthText.text)
+                        onClicked:mutation.AddingStudent(nameText.text, birthText.text)
                     }
                 }
             }

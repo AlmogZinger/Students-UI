@@ -1,36 +1,43 @@
-//
-// Created by almog on 8/10/23.
-//
-
-#ifndef MYQTPROJECT_APLICATIONSINGLETON_HPP
-#define MYQTPROJECT_APLICATIONSINGLETON_HPP
-#include "graphql/__generated__/AddStudentMutation.hpp"
-
+#pragma once
 #include "graphql/__generated__/AddStudentMutation.hpp"
 #include "graphql/__generated__/StudentsQuery.hpp"
 #include <QObject>
 #include <QQmlEngine>
 #include <QtQmlIntegration>
 
-class ApplicationSingleton : public QObject {
+class App : public QObject {
   Q_OBJECT
   QML_ELEMENT
   std::shared_ptr<Students::addstudentmutation::AddStudentMutation>
-      add_student_mut;
+      m_add_student_mut;
+  std::shared_ptr<Students::studentsquery::StudentsQuery> m_students_query;
+  Q_PROPERTY(const Students::studentsquery::StudentsQuery *students_query READ
+                 get_students_query CONSTANT)
+  Q_PROPERTY(const Students::addstudentmutation::AddStudentMutation
+                 *add_student_mut READ get_add_student_mut CONSTANT)
 
 public:
-  להוסיף גם לקווארי אותו דבר ApplicationSingleton() {
-    add_student_mut =
+  App() {
+    m_add_student_mut =
         Students::addstudentmutation::AddStudentMutation::shared();
+    m_students_query = Students::studentsquery::StudentsQuery::shared();
+    m_students_query->fetch();
   }
+
+  const Students::studentsquery::StudentsQuery *get_students_query() {
+    return m_students_query.get();
+  }
+  const Students::addstudentmutation::AddStudentMutation *
+  get_add_student_mut() {
+    return m_add_student_mut.get();
+  }
+
 public slots:
-  זה הפונקתייה שהqml שולח void addStudentCpp(const QString &name,
-                                             QDate birthday) {
-    add_student_mut->set_variables(
+  void addStudentCpp(const QString &name, QDate birthday) {
+    m_add_student_mut->set_variables(
         {.g_name = name,
          .g_birthDate = qtgql::customscalars::DateScalar(birthday)});
-    add_student_mut->fetch();
+    m_add_student_mut->fetch();
+    m_students_query->refetch();
   }
 };
-
-#endif // MYQTPROJECT_APLICATIONSINGLETON_HPP
