@@ -62,5 +62,5 @@ target_link_libraries(
     qtgql::qtgql
     ${PROJECT_NAME}schema
     ${PROJECT_NAME}StudentsQuery
-    
+
 )

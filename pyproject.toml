@@ -10,6 +10,7 @@ python = ">=3.8,<3.12"
 conan = "^2.0.9"
 aqtinstall = "^3.1.6"
 qtgql = {path = "3rdparty/qtgql"}
+pre-commit = "^3.3.3"
 
 
 [build-system]

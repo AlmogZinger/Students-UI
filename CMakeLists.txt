@@ -28,4 +28,3 @@ target_link_libraries(app PUBLIC
         qtgql::qtgql
         Students
         )
-

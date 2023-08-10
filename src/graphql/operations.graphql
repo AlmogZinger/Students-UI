@@ -7,3 +7,10 @@ query StudentsQuery{
         }
     }
 }
+
+mutation AddingStudent($g_name : String! , $g_birthDate : Date! ){
+    addStudent(name: $g_name  ,birth:$g_birthDate){
+        name
+        birthDate
+    }
+}
