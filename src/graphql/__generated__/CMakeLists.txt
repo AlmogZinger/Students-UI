@@ -51,6 +51,23 @@ target_link_libraries(${PROJECT_NAME}StudentsQuery PUBLIC
         ${PROJECT_NAME}schema
         qtgql::qtgql
         )
+qt_add_qml_module(${PROJECT_NAME}AddStudentMutation
+        URI GraphQL.${PROJECT_NAME}.AddStudentMutation
+        # Using PLUGIN_TARGET in static library compilation will cause link failure
+        OUTPUT_DIRECTORY ${QTGQL_QML_PLUGIN_DIRECTORY}/AddStudentMutation
+        # TYPEINFO "plugins.qmltypes"
+        SOURCES
+        /home/almog/CLionProjects/Students-UI/src/graphql/__generated__/AddStudentMutation.hpp
+        /home/almog/CLionProjects/Students-UI/src/graphql/__generated__/AddStudentMutation.cpp
+        )
+
+target_link_libraries(${PROJECT_NAME}AddStudentMutation PUBLIC
+        Qt::CorePrivate
+        Qt::QuickPrivate
+        Qt::QmlPrivate
+        ${PROJECT_NAME}schema
+        qtgql::qtgql
+        )
 
 
 qt_add_library(${PROJECT_NAME} "")
@@ -62,5 +79,6 @@ target_link_libraries(
     qtgql::qtgql
     ${PROJECT_NAME}schema
     ${PROJECT_NAME}StudentsQuery
-    
+    ${PROJECT_NAME}AddStudentMutation
+
 )

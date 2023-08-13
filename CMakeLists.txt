@@ -17,7 +17,7 @@ set(SOURCES
     src/main.cpp
 
         # Add other source files here
-        )
+        src/applicationsingleton.cpp src/aplicationsingleton.hpp)
 
 # Create the executable
 qt_add_executable(app ${SOURCES})
@@ -28,4 +28,3 @@ target_link_libraries(app PUBLIC
         qtgql::qtgql
         Students
         )
-
