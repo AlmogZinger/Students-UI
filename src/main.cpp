@@ -23,13 +23,6 @@ int main(int argc, char *argv[]) {
 
   ApplicationSingleton pSingleton = ApplicationSingleton();
   engine.rootContext()->setContextProperty("ApplicationSingleton", &pSingleton);
-
-  //  auto m_students_query = Students::studentsquery::StudentsQuery::shared();
-  //  m_students_query->fetch();
-  // engine.rootContext()->setContextProperty("query", m_students_query.get());
-  //  auto addStudentMutation =
-  //  Students::addstudentmutation::AddStudentMutation::shared();
-  //  addStudentMutation->set_variables(Students::addstudentmutation::AddStudentMutationVariables{.g_birthDate})
   const QUrl url(
       QStringLiteral("/home/almog/CLionProjects/Students-UI/src/main.qml"));
 
