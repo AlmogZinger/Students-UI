@@ -1,3 +1,6 @@
 [submodule "3rdparty/qtgql"]
 	path = 3rdparty/qtgql
 	url = https://github.com/qtgql/qtgql.git
+[submodule "qtgql"]
+	path = qtgql
+	url = https://github.com/qtgql/qtgql.git

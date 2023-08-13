@@ -1,6 +1,9 @@
 #include <QGuiApplication>
 #include <QUrl>
 
+#include "aplicationsingleton.hpp"
+#include "graphql/__generated__/AddStudentMutation.hpp"
+#include "graphql/__generated__/StudentsQuery.hpp"
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <iostream>
@@ -18,13 +21,19 @@ int main(int argc, char *argv[]) {
                               {"http://127.0.0.1:8000/graphql/"}))));
   qtgql::bases::Environment::set_gql_env(env);
 
-  auto cont_query = Students::studentsquery::StudentsQuery::shared();
-  cont_query->fetch();
-  engine.rootContext()->setContextProperty("query", cont_query.get());
+  ApplicationSingleton pSingleton = ApplicationSingleton();
+  engine.rootContext()->setContextProperty("ApplicationSingleton", &pSingleton);
+
+  //  auto m_students_query = Students::studentsquery::StudentsQuery::shared();
+  //  m_students_query->fetch();
+  // engine.rootContext()->setContextProperty("query", m_students_query.get());
+  //  auto addStudentMutation =
+  //  Students::addstudentmutation::AddStudentMutation::shared();
+  //  addStudentMutation->set_variables(Students::addstudentmutation::AddStudentMutationVariables{.g_birthDate})
   const QUrl url(
       QStringLiteral("/home/almog/CLionProjects/Students-UI/src/main.qml"));
 
   engine.load(url);
 
-  return app.exec();
+  return QGuiApplication::exec();
 }

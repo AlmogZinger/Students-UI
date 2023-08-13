@@ -35,7 +35,7 @@ target_link_libraries(${PROJECT_NAME}schema
         qtgql::qtgql
         )
 qt_add_qml_module(${PROJECT_NAME}StudentsQuery
-        URI GraphQL.${PROJECT_NAME}.
+        URI GraphQL.${PROJECT_NAME}.StudentsQuery
         # Using PLUGIN_TARGET in static library compilation will cause link failure
         OUTPUT_DIRECTORY ${QTGQL_QML_PLUGIN_DIRECTORY}/StudentsQuery
         # TYPEINFO "plugins.qmltypes"

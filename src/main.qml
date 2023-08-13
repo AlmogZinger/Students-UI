@@ -5,8 +5,6 @@ import QtQuick.Layouts
 Window {
     id: root
 
-    property var students: query.data.students
-
     height: 700
     title: "Qt Example"
     visible: true
@@ -19,14 +17,14 @@ Window {
         anchors.top: root.top
         clip: true
         height: 500
-        model: root.students
+        model: ApplicationSingleton.studentsQuery.data?.students
         width: parent.width
 
         delegate: Rectangle {
             id: currentStudent
 
             required property var model
-            property Student__students student: currentStudent.model.data
+            property var student: model.data
 
             color: "red"
             height: 200
@@ -56,14 +54,14 @@ Window {
                         id: insideDelegate
 
                         required property var model
-                        property Test__studentstest test: model.data
+                        property var test: model.data
 
                         height: 50
                         width: 100
 
                         Text {
                             anchors.centerIn: parent
-                            text: `${insideDelegate.test.grade} ${insideDelegate.test.grade}`
+                            text: `${insideDelegate.test.subject} ${insideDelegate.test.grade}`
                             width: parent.width * 0.4
                         }
                     }
@@ -82,34 +80,7 @@ Window {
 
                 onClicked: popup.open()
             }
-            Popup {
-                id: popup
 
-                closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
-                focus: true
-                height: 100
-                modal: true
-                width: 300
-                x: 0
-                y: 30
-
-                ColumnLayout {
-                    TextField {
-                        id: nameText
-                        text: "enter the name of the student"
-                        width: text.implicitWidth
-                    }
-                    TextField {
-                        id: birthText
-
-                        text: "enter the birthday of the student like \n 03-06-1998"
-                    }
-                    Button {
-                        text: "Append!"
-                        onClicked: mutation.AddingStudent(nameText.text, birthText.text)
-                    }
-                }
-            }
             Button {
                 text: "Remove last"
                 onClicked: listView.model.removeLast()
@@ -118,6 +89,36 @@ Window {
                 text: "Clear"
 
                 onClicked: listView.model.clear()
+            }
+        }
+    }
+    Popup {
+        id: popup
+
+        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
+        z: 123123
+        focus: true
+        height: 300
+        modal: true
+        width: 400
+        anchors.centerIn: parent
+        contentItem: ColumnLayout {
+            TextField {
+                id: nameText
+                text: "enter the name of the student"
+            }
+            Calender {
+                id: calendar
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+            }
+            Button {
+                text: "Append!"
+                onClicked: ApplicationSingleton.add_student(nameText.text, calendar.birthDay)
+            }
+            Text {
+                property var add_mutation: ApplicationSingleton.addStudentMutation
+                text: add_mutation.completed ? `${add_mutation.data.addStudent.name} is added to the system` : add_mutation.operationInFlight ? "Sending..." : ""
             }
         }
     }
