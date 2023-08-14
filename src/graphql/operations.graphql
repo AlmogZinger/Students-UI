@@ -1,16 +1,19 @@
 query StudentsQuery{
     students {
-        name
-        test {
-            subject
-            grade
-        }
+        ...StudentsFragment
     }
 }
 
 mutation AddStudentMutation($g_name : String! , $g_birthDate : Date! ){
     addStudent(name: $g_name  ,birth:$g_birthDate){
-        name
-        birthDate
+        ...StudentsFragment
+    }
+}
+
+fragment StudentsFragment on Student{
+    name
+    tests {
+        subject
+        grade
     }
 }

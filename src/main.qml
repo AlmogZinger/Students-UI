@@ -82,8 +82,8 @@ Window {
             }
 
             Button {
-                text: "Remove last"
-                onClicked: listView.model.removeLast()
+                text: "refatch"
+                onClicked: ApplicationSingleton.fakerefatch()
             }
             Button {
                 text: "Clear"
@@ -105,7 +105,7 @@ Window {
         contentItem: ColumnLayout {
             TextField {
                 id: nameText
-                text: "enter the name of the student"
+                placeholderText: qsTr("Enter name")
             }
             Calender {
                 id: calendar
@@ -118,7 +118,7 @@ Window {
             }
             Text {
                 property var add_mutation: ApplicationSingleton.addStudentMutation
-                text: add_mutation.completed ? `${add_mutation.data.addStudent.name} is added to the system` : add_mutation.operationInFlight ? "Sending..." : ""
+                text: add_mutation.completed ? `${nameText.text} is added to the system` : add_mutation.operationInFlight ? "Sending..." : ""
             }
         }
     }

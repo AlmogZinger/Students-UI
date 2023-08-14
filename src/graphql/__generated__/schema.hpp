@@ -106,13 +106,13 @@ public:
   qtgql::bases::scalars::Id m_id = qtgql::bases::DEFAULTS::ID;
   QString m_name = qtgql::bases::DEFAULTS::STRING;
   qtgql::customscalars::DateTimeScalar m_birthDate = {};
-  std::vector<std::shared_ptr<Test>> m_test = {};
+  std::vector<std::shared_ptr<Test>> m_tests = {};
 
 signals:
   void idChanged();
   void nameChanged();
   void birthDateChanged();
-  void testChanged();
+  void testsChanged();
 
 public:
   [[nodiscard]] const qtgql::bases::scalars::Id &get_id() const { return m_id; }
@@ -133,12 +133,12 @@ public:
     emit birthDateChanged();
   };
 
-  [[nodiscard]] const std::vector<std::shared_ptr<Test>> &get_test() const {
-    return m_test;
+  [[nodiscard]] const std::vector<std::shared_ptr<Test>> &get_tests() const {
+    return m_tests;
   }
-  void set_test(const std::vector<std::shared_ptr<Test>> &v) {
-    m_test = v;
-    emit testChanged();
+  void set_tests(const std::vector<std::shared_ptr<Test>> &v) {
+    m_tests = v;
+    emit testsChanged();
   };
 
 public:

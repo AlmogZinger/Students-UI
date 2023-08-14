@@ -29,12 +29,15 @@ public:
         Students::addstudentmutation::AddStudentMutation::shared();
     m_students_query = Students::studentsquery::StudentsQuery::shared();
     m_students_query->fetch();
+    connect(m_add_student_mut.get(),
+            &Students::addstudentmutation::AddStudentMutation::completedChanged,
+            [=]() { m_students_query->refetch(); });
   }
   auto get_students_query() { return m_students_query.get(); }
   auto get_add_student() { return m_add_student_mut.get(); }
-
+signals:
+  void studentsListChanged();
 public slots:
-
   void add_student(const QString &name, const QDate &birthday) {
     m_add_student_mut->set_variables(
         {.g_name = name,
@@ -43,7 +46,9 @@ public slots:
       m_add_student_mut->refetch();
     else
       m_add_student_mut->fetch();
+    emit studentsListChanged();
   }
+  void fakerefatch() { m_students_query->refetch(); }
 };
 
 #endif // MYQTPROJECT_APLICATIONSINGLETON_HPP

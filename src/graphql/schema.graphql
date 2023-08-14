@@ -1,7 +1,7 @@
-"""Date (iso format)"""
+"""Date (isoformat)"""
 scalar Date
 
-"""Date with time (iso format)"""
+"""Date with time (isoformat)"""
 scalar DateTime
 
 type Mutation {
@@ -17,7 +17,7 @@ type Student {
   id: ID!
   name: String!
   birthDate: DateTime!
-  test: [Test!]!
+  tests: [Test!]!
 }
 
 type Test {

@@ -8,16 +8,16 @@ namespace Students::studentsquery {
 class StudentsQuery;
 
 namespace deserializers {
-std::shared_ptr<Test> des_Test__studentstest(const QJsonObject &data,
-                                             const StudentsQuery *operation);
+std::shared_ptr<Test> des_Test__studentstests(const QJsonObject &data,
+                                              const StudentsQuery *operation);
 std::shared_ptr<Student> des_Student__students(const QJsonObject &data,
                                                const StudentsQuery *operation);
 }; // namespace deserializers
 
 namespace updaters {
-void update_Test__studentstest(const std::shared_ptr<Test> &inst,
-                               const QJsonObject &data,
-                               const StudentsQuery *operation);
+void update_Test__studentstests(const std::shared_ptr<Test> &inst,
+                                const QJsonObject &data,
+                                const StudentsQuery *operation);
 void update_Student__students(const std::shared_ptr<Student> &inst,
                               const QJsonObject &data,
                               const StudentsQuery *operation);
@@ -29,7 +29,7 @@ void update_Query__(Query *inst, const QJsonObject &data,
 
 // ------------ Narrowed Object types ------------
 
-class Test__studentstest : public qtgql::bases::ObjectTypeABC {
+class Test__studentstests : public qtgql::bases::ObjectTypeABC {
 
   StudentsQuery *m_operation;
 
@@ -49,8 +49,8 @@ protected:
   std::shared_ptr<Students::Test> m_inst;
 
 public:
-  Test__studentstest(StudentsQuery *operation,
-                     const std::shared_ptr<Test> &inst);
+  Test__studentstests(StudentsQuery *operation,
+                      const std::shared_ptr<Test> &inst);
 
   void qtgql_replace_concrete(const std::shared_ptr<Test> &new_inst);
 
@@ -77,16 +77,16 @@ class Student__students : public qtgql::bases::ObjectTypeABC {
   Q_PROPERTY(QString __typeName READ __typename CONSTANT)
 
   Q_PROPERTY(const QString name READ get_name NOTIFY nameChanged);
-  Q_PROPERTY(const qtgql::bases::ListModelABC<Test__studentstest *> *test READ
-                 get_test NOTIFY testChanged);
+  Q_PROPERTY(const qtgql::bases::ListModelABC<Test__studentstests *> *tests READ
+                 get_tests NOTIFY testsChanged);
 
 signals:
   void nameChanged();
-  void testChanged();
+  void testsChanged();
 
 protected:
   std::shared_ptr<Students::Student> m_inst;
-  qtgql::bases::ListModelABC<Test__studentstest *> *m_test;
+  qtgql::bases::ListModelABC<Test__studentstests *> *m_tests;
 
 public:
   Student__students(StudentsQuery *operation,
@@ -99,8 +99,8 @@ protected:
 
 public:
   [[nodiscard]] const QString get_name() const;
-  [[nodiscard]] const qtgql::bases::ListModelABC<Test__studentstest *> *
-  get_test() const;
+  [[nodiscard]] const qtgql::bases::ListModelABC<Test__studentstests *> *
+  get_tests() const;
 
 public:
   [[nodiscard]] const QString &__typename() const final {
@@ -169,16 +169,19 @@ public:
   StudentsQueryVariables vars_inst;
 
   StudentsQuery()
-      : qtgql::bases::OperationHandlerABC(
-            qtgql::bases::GraphQLMessage("query StudentsQuery {"
-                                         "  students {"
-                                         "    name"
-                                         "    test {"
-                                         "      subject"
-                                         "      grade"
-                                         "    }"
-                                         "  }"
-                                         "}")){};
+      : qtgql::bases::OperationHandlerABC(qtgql::bases::GraphQLMessage(
+            "query StudentsQuery {"
+            "  students {"
+            "    ...StudentsFragment"
+            "  }"
+            "}"
+            "fragment StudentsFragment on Student {"
+            "  name"
+            "  tests {"
+            "    subject"
+            "    grade"
+            "  }"
+            "}")){};
 
   QTGQL_STATIC_MAKE_SHARED(StudentsQuery)
 
