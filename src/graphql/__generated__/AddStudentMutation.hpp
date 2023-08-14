@@ -8,12 +8,18 @@ namespace Students::addstudentmutation {
 class AddStudentMutation;
 
 namespace deserializers {
+std::shared_ptr<Test>
+des_Test__addStudenttests(const QJsonObject &data,
+                          const AddStudentMutation *operation);
 std::shared_ptr<Student>
 des_Student__addStudent(const QJsonObject &data,
                         const AddStudentMutation *operation);
-};
+}; // namespace deserializers
 
 namespace updaters {
+void update_Test__addStudenttests(const std::shared_ptr<Test> &inst,
+                                  const QJsonObject &data,
+                                  const AddStudentMutation *operation);
 void update_Student__addStudent(const std::shared_ptr<Student> &inst,
                                 const QJsonObject &data,
                                 const AddStudentMutation *operation);
@@ -25,6 +31,44 @@ void update_Mutation__(Mutation *inst, const QJsonObject &data,
 
 // ------------ Narrowed Object types ------------
 
+class Test__addStudenttests : public qtgql::bases::ObjectTypeABC {
+
+  AddStudentMutation *m_operation;
+
+  Q_OBJECT
+  QML_ELEMENT
+  QML_UNCREATABLE("QtGql does not supports instantiation via qml")
+  Q_PROPERTY(QString __typeName READ __typename CONSTANT)
+
+  Q_PROPERTY(const QString subject READ get_subject NOTIFY subjectChanged);
+  Q_PROPERTY(const int grade READ get_grade NOTIFY gradeChanged);
+
+signals:
+  void subjectChanged();
+  void gradeChanged();
+
+protected:
+  std::shared_ptr<Students::Test> m_inst;
+
+public:
+  Test__addStudenttests(AddStudentMutation *operation,
+                        const std::shared_ptr<Test> &inst);
+
+  void qtgql_replace_concrete(const std::shared_ptr<Test> &new_inst);
+
+protected:
+  void _qtgql_connect_signals();
+
+public:
+  [[nodiscard]] const QString get_subject() const;
+  [[nodiscard]] const int get_grade() const;
+
+public:
+  [[nodiscard]] const QString &__typename() const final {
+    return m_inst->__typename();
+  }
+};
+
 class Student__addStudent : public qtgql::bases::ObjectTypeABC {
 
   AddStudentMutation *m_operation;
@@ -35,15 +79,16 @@ class Student__addStudent : public qtgql::bases::ObjectTypeABC {
   Q_PROPERTY(QString __typeName READ __typename CONSTANT)
 
   Q_PROPERTY(const QString name READ get_name NOTIFY nameChanged);
-  Q_PROPERTY(
-      const QString birthDate READ get_birthDate NOTIFY birthDateChanged);
+  Q_PROPERTY(const qtgql::bases::ListModelABC<Test__addStudenttests *> *tests
+                 READ get_tests NOTIFY testsChanged);
 
 signals:
   void nameChanged();
-  void birthDateChanged();
+  void testsChanged();
 
 protected:
   std::shared_ptr<Students::Student> m_inst;
+  qtgql::bases::ListModelABC<Test__addStudenttests *> *m_tests;
 
 public:
   Student__addStudent(AddStudentMutation *operation,
@@ -56,7 +101,8 @@ protected:
 
 public:
   [[nodiscard]] const QString get_name() const;
-  [[nodiscard]] const QString get_birthDate() const;
+  [[nodiscard]] const qtgql::bases::ListModelABC<Test__addStudenttests *> *
+  get_tests() const;
 
 public:
   [[nodiscard]] const QString &__typename() const final {
@@ -138,8 +184,14 @@ public:
             "mutation AddStudentMutation($g_name: String!, $g_birthDate: "
             "Date!) {"
             "  addStudent(name: $g_name, birth: $g_birthDate) {"
-            "    name"
-            "    birthDate"
+            "    ...StudentsFragment"
+            "  }"
+            "}"
+            "fragment StudentsFragment on Student {"
+            "  name"
+            "  tests {"
+            "    subject"
+            "    grade"
             "  }"
             "}")){};
 

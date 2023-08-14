@@ -5,15 +5,15 @@ namespace Students::studentsquery {
 // Interfaces
 
 // Constructor
-Test__studentstest::Test__studentstest(StudentsQuery *operation,
-                                       const std::shared_ptr<Test> &inst)
+Test__studentstests::Test__studentstests(StudentsQuery *operation,
+                                         const std::shared_ptr<Test> &inst)
     : m_inst{inst}, ObjectTypeABC ::ObjectTypeABC(operation) {
   m_operation = operation;
 
   _qtgql_connect_signals();
 }
 
-void Test__studentstest::_qtgql_connect_signals() {
+void Test__studentstests::_qtgql_connect_signals() {
 
   auto m_inst_ptr = m_inst.get();
   Q_ASSERT_X(m_inst_ptr, __FILE__,
@@ -31,8 +31,8 @@ void Test__studentstest::_qtgql_connect_signals() {
 // Deserialzier
 
 std::shared_ptr<Test>
-deserializers::des_Test__studentstest(const QJsonObject &data,
-                                      const StudentsQuery *operation) {
+deserializers::des_Test__studentstests(const QJsonObject &data,
+                                       const StudentsQuery *operation) {
   if (data.isEmpty()) {
     return {};
   }
@@ -50,9 +50,9 @@ deserializers::des_Test__studentstest(const QJsonObject &data,
 };
 
 // Updater
-void updaters::update_Test__studentstest(const std::shared_ptr<Test> &inst,
-                                         const QJsonObject &data,
-                                         const StudentsQuery *operation) {
+void updaters::update_Test__studentstests(const std::shared_ptr<Test> &inst,
+                                          const QJsonObject &data,
+                                          const StudentsQuery *operation) {
   if (!data.value("subject").isNull()) {
     auto new_subject = data.value("subject").toString();
     if (inst->m_subject != new_subject) {
@@ -68,17 +68,17 @@ void updaters::update_Test__studentstest(const std::shared_ptr<Test> &inst,
   }
 };
 
-// Test__studentstest Getters
-[[nodiscard]] const QString Test__studentstest::get_subject() const {
+// Test__studentstests Getters
+[[nodiscard]] const QString Test__studentstests::get_subject() const {
 
   return m_inst->get_subject();
 };
-[[nodiscard]] const int Test__studentstest::get_grade() const {
+[[nodiscard]] const int Test__studentstests::get_grade() const {
 
   return m_inst->get_grade();
 };
 
-void Test__studentstest::qtgql_replace_concrete(
+void Test__studentstests::qtgql_replace_concrete(
     const std::shared_ptr<Test> &new_inst) {
   if (new_inst == m_inst) {
     return;
@@ -101,12 +101,12 @@ Student__students::Student__students(StudentsQuery *operation,
     : m_inst{inst}, ObjectTypeABC ::ObjectTypeABC(operation) {
   m_operation = operation;
 
-  auto init_vec_test = std::vector<Test__studentstest *>();
-  for (const auto &node : m_inst->get_test()) {
-    init_vec_test.push_back(new Test__studentstest(operation, node));
+  auto init_vec_tests = std::vector<Test__studentstests *>();
+  for (const auto &node : m_inst->get_tests()) {
+    init_vec_tests.push_back(new Test__studentstests(operation, node));
   }
-  m_test = new qtgql::bases::ListModelABC<Test__studentstest *>(
-      this, std::move(init_vec_test));
+  m_tests = new qtgql::bases::ListModelABC<Test__studentstests *>(
+      this, std::move(init_vec_tests));
 
   _qtgql_connect_signals();
 }
@@ -120,24 +120,24 @@ void Student__students::_qtgql_connect_signals() {
     auto operation = m_operation;
     emit nameChanged();
   });
-  connect(m_inst_ptr, &Students::Student::testChanged, this, [&]() {
+  connect(m_inst_ptr, &Students::Student::testsChanged, this, [&]() {
     auto operation = m_operation;
-    auto new_data = m_inst->get_test();
+    auto new_data = m_inst->get_tests();
     auto new_len = new_data.size();
-    auto prev_len = m_test->rowCount();
+    auto prev_len = m_tests->rowCount();
     if (new_len < prev_len) {
-      m_test->removeRows(prev_len - 1, prev_len - new_len);
+      m_tests->removeRows(prev_len - 1, prev_len - new_len);
     }
     for (int i = 0; i < new_len; i++) {
       const auto &concrete = new_data.at(i);
       if (i >= prev_len) {
-        m_test->append(new Test__studentstest(operation, concrete));
+        m_tests->append(new Test__studentstests(operation, concrete));
       } else {
-        auto proxy_to_update = m_test->get(i);
+        auto proxy_to_update = m_tests->get(i);
         if (proxy_to_update) {
           proxy_to_update->qtgql_replace_concrete(concrete);
         } else {
-          m_test->replace(i, new Test__studentstest(operation, concrete));
+          m_tests->replace(i, new Test__studentstests(operation, concrete));
         }
       }
     }
@@ -158,15 +158,15 @@ deserializers::des_Student__students(const QJsonObject &data,
     inst->set_name(data.value("name").toString());
   };
 
-  if (!data.value("test").isNull()) {
+  if (!data.value("tests").isNull()) {
 
-    std::vector<std::shared_ptr<Test>> test_init_vec;
-    for (const auto &node : data.value("test").toArray()) {
+    std::vector<std::shared_ptr<Test>> tests_init_vec;
+    for (const auto &node : data.value("tests").toArray()) {
 
-      test_init_vec.push_back(
-          deserializers::des_Test__studentstest(node.toObject(), operation));
+      tests_init_vec.push_back(
+          deserializers::des_Test__studentstests(node.toObject(), operation));
     };
-    inst->set_test(test_init_vec);
+    inst->set_tests(tests_init_vec);
   };
 
   return inst;
@@ -183,17 +183,17 @@ void updaters::update_Student__students(const std::shared_ptr<Student> &inst,
     }
   }
 
-  if (!data.value("test").isNull()) {
+  if (!data.value("tests").isNull()) {
 
-    if (!data.value("test").isNull()) {
+    if (!data.value("tests").isNull()) {
 
-      std::vector<std::shared_ptr<Test>> test_init_vec;
-      for (const auto &node : data.value("test").toArray()) {
+      std::vector<std::shared_ptr<Test>> tests_init_vec;
+      for (const auto &node : data.value("tests").toArray()) {
 
-        test_init_vec.push_back(
-            deserializers::des_Test__studentstest(node.toObject(), operation));
+        tests_init_vec.push_back(
+            deserializers::des_Test__studentstests(node.toObject(), operation));
       };
-      inst->set_test(test_init_vec);
+      inst->set_tests(tests_init_vec);
     };
   }
 };
@@ -203,10 +203,10 @@ void updaters::update_Student__students(const std::shared_ptr<Student> &inst,
 
   return m_inst->get_name();
 };
-[[nodiscard]] const qtgql::bases::ListModelABC<Test__studentstest *> *
-Student__students::get_test() const {
+[[nodiscard]] const qtgql::bases::ListModelABC<Test__studentstests *> *
+Student__students::get_tests() const {
 
-  return m_test;
+  return m_tests;
 };
 
 void Student__students::qtgql_replace_concrete(
@@ -219,24 +219,24 @@ void Student__students::qtgql_replace_concrete(
     auto operation = m_operation;
     emit nameChanged();
   };
-  if (m_inst->m_test != new_inst->m_test) {
+  if (m_inst->m_tests != new_inst->m_tests) {
     auto operation = m_operation;
-    auto new_data = m_inst->get_test();
+    auto new_data = m_inst->get_tests();
     auto new_len = new_data.size();
-    auto prev_len = m_test->rowCount();
+    auto prev_len = m_tests->rowCount();
     if (new_len < prev_len) {
-      m_test->removeRows(prev_len - 1, prev_len - new_len);
+      m_tests->removeRows(prev_len - 1, prev_len - new_len);
     }
     for (int i = 0; i < new_len; i++) {
       const auto &concrete = new_data.at(i);
       if (i >= prev_len) {
-        m_test->append(new Test__studentstest(operation, concrete));
+        m_tests->append(new Test__studentstests(operation, concrete));
       } else {
-        auto proxy_to_update = m_test->get(i);
+        auto proxy_to_update = m_tests->get(i);
         if (proxy_to_update) {
           proxy_to_update->qtgql_replace_concrete(concrete);
         } else {
-          m_test->replace(i, new Test__studentstest(operation, concrete));
+          m_tests->replace(i, new Test__studentstests(operation, concrete));
         }
       }
     }
